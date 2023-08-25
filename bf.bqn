@@ -103,7 +103,7 @@ Step ← {
     '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     '.': •term.OutRaw <@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
-    ',': c←•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
+    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
   }ip⊑tt
   s‿⟨p, tt, td, o⟩
 
