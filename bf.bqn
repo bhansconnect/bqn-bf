@@ -114,7 +114,7 @@ Step ← {
       ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)d⟩;
     '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
-    '.': •term.Flush •term.OutRaw <@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
+    '.': •term.Flush •term.OutRaw ⋈@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
     ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
   }ip⊑tt
   s‿⟨tt, td, o, r⟩
