@@ -2,6 +2,7 @@
 ⟨
   Parse
   Fold
+  FlattenOffsets
   Init
   Step
 ⟩⇐
@@ -48,37 +49,63 @@ Fold ← {
 
   k←¬r←(dt+pt)×i0
 
-  p↩(/r)(⊢-⍋)k/p
   tt↩k/tt
   td↩k/td
-  an←(/r)(⊢-⍋)td×+˝"[]"=⌜tt
-  td↩an+td×0=an
+
+  p↩(/r)(⊢-⍋)k/p
+  an←(/r)(⊢-⍋)td×m←+˝"[]"=⌜tt
+  td↩an+td×¬m
 
   ⟨p, tt, td⟩
 }
 
-Init ← {
+# switch to only having + and no >.
+# + will also store the offset to increment at.
+# [ and ] will store increment for the entire block.
+FlattenOffsets ← {
   p‿tt‿td←𝕩
-  
+
+  # this has ungroup which is probably slow.
+  # probably can do it some other way?
+  k←¬r←'>'=tt
+  o←g⊔⁼+`¨(r×td)⊔˜g←0»+`tt∊"[]"
+
+  tt↩k/tt
+  td↩k/td
+  o↩k/o
+
+  p↩(/r)(⊢-⍋)k/p
+  # when we remove a jump target this has issues
+  # maybe add 1 if the jump target is a value being removed?
+  # so if 5 is in r and a > make it 6? or the next non > character
+  # This +0.1 is a hack that I assume really hurts perf.
+  an←(0.1+/r)(⊢-⍋)td×m←+˝"[]"=⌜tt
+  td↩an+td×¬m
+
+  ⟨p, tt, td, o⟩
+}
+
+Init ← {
   d←0⥊˜𝕨⊣30000
   ip←0
   dp←0
-  ⟨ip, dp, d⟩‿⟨p, tt, td⟩
+  ⟨ip, dp, d⟩‿𝕩
 }
 
 Step ← {
-  ⟨ip, dp, d⟩‿⟨p, tt, td⟩←𝕩
+  ⟨ip, dp, d⟩‿⟨p, tt, td, o⟩←𝕩
 
   id←ip⊑td
+  io←ip⊑o
+  do←dp+io
   s←{
-    '+': ⟨ip+1, dp, (256|id⊸+)⌾(dp⊸⊑)d⟩;
-    '>': ⟨ip+1, dp+id, d⟩;
-    '[': j←0=dp⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, dp, d⟩;
-    ']': j←0≠dp⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, dp, d⟩;
-    '.': •term.OutRaw <@+dp⊑d ⋄ ⟨ip+1, dp, d⟩;
-    ',': c←•term.CharB ⟨⟩ ⋄ ⟨ip+1, dp, c⌾(dp⊸⊑)d⟩
+    '+': ⟨ip+1, dp, (256|id⊸+)⌾(do⊸⊑)d⟩;
+    '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
+    ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
+    '.': •term.OutRaw <@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
+    ',': c←•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
   }ip⊑tt
-  s‿⟨p, tt, td⟩
+  s‿⟨p, tt, td, o⟩
 
   # below is an attempt at being more "array" style
   # less branching and more masking
@@ -89,7 +116,7 @@ Step ← {
   # ct←1⊑it
   
   # d↩(256|dd⊸+)⌾(dp⊸⊑)d
-  # d↩{in ? •term.CharB ⟨⟩; 𝕩}⌾(dp⊸⊑)d
+  # d↩{in ? •term.CharB@; 𝕩}⌾(dp⊸⊑)d
   # # {out ? •term.OutRaw <@+dp⊑d; 0}
 
   # nz←¬z←0=dp⊑d

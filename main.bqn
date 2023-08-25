@@ -1,7 +1,7 @@
-⟨Parse, Fold, Init, Step⟩ ← •Import "bf.bqn"
+⟨Parse, Fold, FlattenOffsets, Init, Step⟩ ← •Import "bf.bqn"
 
 Log ← {
-	•Out (16 ↑ 14 ↑ •Fmt •MonoTime ⟨⟩) ∾ 𝕩
+	•Out (16 ↑ 14 ↑ •Fmt •MonoTime@) ∾ 𝕩
 }
 
 n←⊑•args
@@ -13,6 +13,9 @@ ast←Parse f
 
 # Log "Starting Optimizations"
 ast↩Fold ast
+# Log "Completed Fold"
+ast↩FlattenOffsets ast
+# Log "Completed FlattenOffsets"
 # Log "Completed Optimizations"
 
 # Log "Starting Program"
