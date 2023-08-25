@@ -4,6 +4,8 @@ Log ← {
 	•Out (16 ↑ 14 ↑ •Fmt •MonoTime@) ∾ 𝕩
 }
 
+While ← {𝕩•_while_𝕨@}´
+
 n←⊑•args
 # Log "Starting BF interpreter for " ∾ n
 f←•Fchars n
@@ -20,5 +22,8 @@ ast↩FlattenOffsets ast
 
 # Log "Starting Program"
 # •Show 10000 {Step⍟100_000_000⎊1 10 Init𝕩}•_timed ast
-Step⍟100_000_000⎊1 Init ast
+s←Init ast
+While⎊@ 1‿{𝕤
+	s↩Step s
+}
 # Log "Completed Program or ran out of steps"
