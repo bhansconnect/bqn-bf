@@ -106,25 +106,4 @@ Step ← {
     ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
   }ip⊑tt
   s‿⟨p, tt, td, o⟩
-
-  # below is an attempt at being more "array" style
-  # less branching and more masking
-  # it also works, but is about 4x slower
-  # od‿cd‿dd‿pd‿in‿out←(ip⊑td)×it←"[]+>,."=ip⊑tt
-
-  # ot←0⊑it
-  # ct←1⊑it
-  
-  # d↩(256|dd⊸+)⌾(dp⊸⊑)d
-  # d↩{in ? •term.CharB@; 𝕩}⌾(dp⊸⊑)d
-  # # {out ? •term.OutRaw <@+dp⊑d; 0}
-
-  # nz←¬z←0=dp⊑d
-  # # ip↩(od×z)+(cd×nz)+((z∧¬ot)∨nz∧¬ct)×ip+1
-  # ip↩ip+1
-  # ip↩(cd×nz)+(z∨¬ct)×ip
-  # ip↩(od×z)+(nz∨¬ot)×ip
-  # dp↩dp+pd
-
-  # ⟨ip, dp, d⟩‿⟨p, tt, td⟩
 }
