@@ -3,6 +3,7 @@
   Parse
   Fold
   FlattenOffsets
+  Dedup
   Init
   Step
 ⟩⇐
@@ -81,25 +82,40 @@ FlattenOffsets ← {
   ⟨p, tt, td, o⟩
 }
 
+# merge repeated updates to the same offset.
+# then any chain of `+` should be valid to execute in parallel.
+Dedup ← {
+  # TODO: actually implement instead of just hoping...
+  # in any well written bf program, hoping should be safe though.
+  ⟨p, tt, td, o⟩←𝕩
+  r←(+×0⊸≠)`⌾⌽'+'=tt
+  ⟨p, tt, td, o, r⟩
+}
+
 Init ← {
   d←0⥊˜𝕨⊣30000
   ip←0
   dp←0
-  ⟨ip, dp, d⟩‿𝕩
+  ⟨·, tt, td, o, r⟩←𝕩
+  ⟨ip, dp, d⟩‿⟨tt, td, o, r⟩
 }
 
 Step ← {
-  ⟨ip, dp, d⟩‿⟨p, tt, td, o⟩←𝕩
+  ⟨ip, dp, d⟩‿⟨tt, td, o, r⟩←𝕩
 
   id←ip⊑td
   io←ip⊑o
   do←dp+io
   s←{
-    '+': ⟨ip+1, dp, (256|id⊸+)⌾(do⊸⊑)d⟩;
+    '+':
+      ir←ip⊑r
+      mid←ir↑ip↓td
+      mdo←dp+ir↑ip↓o
+      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)d⟩;
     '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     '.': •term.OutRaw <@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
     ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
   }ip⊑tt
-  s‿⟨p, tt, td, o⟩
+  s‿⟨tt, td, o, r⟩
 }
