@@ -75,11 +75,7 @@ FlattenOffsets ← {
   o↩k/o
 
   p↩(/r)(⊢-⍋)k/p
-  # when we remove a jump target this has issues
-  # maybe add 1 if the jump target is a value being removed?
-  # so if 5 is in r and a > make it 6? or the next non > character
-  # This +0.1 is a hack that I assume really hurts perf.
-  an←(0.1+/r)(⊢-⍋)td×m←+˝"[]"=⌜tt
+  an←(/r)(⊢-(⍋-∊˜))td×m←+˝"[]"=⌜tt
   td↩an+td×¬m
 
   ⟨p, tt, td, o⟩
