@@ -97,25 +97,24 @@ Init ← {
   ip←0
   dp←0
   ⟨·, tt, td, o, r⟩←𝕩
-  ⟨ip, dp, d⟩‿⟨tt, td, o, r⟩
+  ⟨ip, dp, d, tt, td, o, r⟩
 }
 
 Step ← {
-  ⟨ip, dp, d⟩‿⟨tt, td, o, r⟩←𝕩
+  ⟨ip, dp, d, tt, td, o, r⟩←𝕩
 
   id←ip⊑td
   io←ip⊑o
   do←dp+io
-  s←{
+  {
     '+':
       ir←ip⊑r
       mid←ir↑ip↓td
       mdo←dp+ir↑ip↓o
-      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)(d↩@)⊢d⟩;
-    '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
-    ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
-    '.': •term.Flush •term.OutRaw ⋈@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
-    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d⟩
+      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)(d↩@)⊢d, tt, td, o, r⟩;
+    '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
+    ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
+    '.': •term.Flush •term.OutRaw ⋈@+do⊑d ⋄ ⟨ip+1, dp, d, tt, td, o, r⟩;
+    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d, tt, td, o, r⟩
   }ip⊑tt
-  s‿⟨tt, td, o, r⟩
 }
