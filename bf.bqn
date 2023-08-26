@@ -111,11 +111,11 @@ Step ← {
       ir←ip⊑r
       mid←ir↑ip↓td
       mdo←dp+ir↑ip↓o
-      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)d⟩;
+      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)(d↩@)⊢d⟩;
     '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d⟩;
     '.': •term.Flush •term.OutRaw ⋈@+do⊑d ⋄ ⟨ip+1, dp, d⟩;
-    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)d⟩
+    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d⟩
   }ip⊑tt
   s‿⟨tt, td, o, r⟩
 }

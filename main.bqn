@@ -26,7 +26,5 @@ ast Dedup↩
 # •Show 10000 {Step⍟100_000_000⎊1 10 Init𝕩}•_timed ast
 # •Show∘Step⍟10 10 Init ast
 s←Init ast
-While⎊@ 1‿{𝕤
-	s↩Step s
-}
+While⎊@ 1‿{𝕤 ⋄ s Step↩ ⋄ @ }
 # Log "Completed Program or ran out of steps"
