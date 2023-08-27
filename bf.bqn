@@ -112,9 +112,17 @@ Step ← {
       mid←ir↑ip↓td
       mdo←dp+ir↑ip↓o
       ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)(d↩@)⊢d, tt, td, o, r⟩;
-    '[': j←0=do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
-    ']': j←0≠do⊑d ⋄ ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
-    '.': •term.Flush •term.OutRaw ⋈@+do⊑d ⋄ ⟨ip+1, dp, d, tt, td, o, r⟩;
-    ',': c←@-˜•term.CharB@ ⋄ ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d, tt, td, o, r⟩
+    '[':
+      j←0=do⊑d
+      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
+    ']':
+      j←0≠do⊑d
+      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
+    '.':
+      •term.Flush •term.OutRaw ⋈@+do⊑d
+      ⟨ip+1, dp, d, tt, td, o, r⟩;
+    ',':
+      c←@-˜•term.CharB@
+      ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d, tt, td, o, r⟩
   }ip⊑tt
 }
