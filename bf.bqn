@@ -100,29 +100,38 @@ Init ← {
   ⟨ip, dp, d, tt, td, o, r⟩
 }
 
-Step ← {
-  ⟨ip, dp, d, tt, td, o, r⟩←𝕩
-
-  id←ip⊑td
-  io←ip⊑o
-  do←dp+io
-  {
-    '+':
+Step ← {⊑"+[].,"⊐(⊑𝕩)⊑3⊑𝕩}◶{
+      ⟨ip, dp, d, tt, td, o, r⟩←𝕩
       ir←ip⊑r
       mid←ir↑ip↓td
       mdo←dp+ir↑ip↓o
-      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)(d↩@)⊢d, tt, td, o, r⟩;
-    '[':
+      ⟨ip+ir, dp, (256|mid⊸+)⌾(mdo⊸⊏)d, tt, td, o, r⟩
+    }‿{
+      ⟨ip, dp, d, tt, td, o, r⟩←𝕩
+      id←ip⊑td
+      io←ip⊑o
+      do←dp+io
       j←0=do⊑d
-      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
-    ']':
+      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩
+    }‿{
+      ⟨ip, dp, d, tt, td, o, r⟩←𝕩
+      id←ip⊑td
+      io←ip⊑o
+      do←dp+io
       j←0≠do⊑d
-      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩;
-    '.':
+      ⟨(j×id)+(¬j)×ip+1, do, d, tt, td, o, r⟩
+    }‿{
+      ⟨ip, dp, d, tt, td, o, r⟩←𝕩
+      id←ip⊑td
+      io←ip⊑o
+      do←dp+io
       •term.Flush •term.OutRaw ⋈@+do⊑d
-      ⟨ip+1, dp, d, tt, td, o, r⟩;
-    ',':
+      ⟨ip+1, dp, d, tt, td, o, r⟩
+    }‿{
+      ⟨ip, dp, d, tt, td, o, r⟩←𝕩
+      id←ip⊑td
+      io←ip⊑o
+      do←dp+io
       c←@-˜•term.CharB@
-      ⟨ip+1, dp, c⌾(do⊸⊑)(d↩@)⊢d, tt, td, o, r⟩
-  }ip⊑tt
-}
+      ⟨ip+1, dp, c⌾(do⊸⊑)d, tt, td, o, r⟩
+    }
